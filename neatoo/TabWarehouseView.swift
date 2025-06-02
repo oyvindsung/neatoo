@@ -21,72 +21,84 @@ struct WarehouseView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                Section {
-                    Button {
-                        showAddFoodSheet = true
-                    } label: {
-                        Text("添加新物品")
-                    }
-                    ForEach(foods.prefix(6), id: \.id) { food in
-                        NavigationLink("\(food.name)") {
-                            FoodDetailInfo(food: food)
+            ScrollView {
+                VStack(spacing: 16) {
+                    WarehouseViewDivide(
+                        title: "食物",
+                        items: foods.sorted { $0.recordDate > $1.recordDate },
+                        showAddSheet: $showAddFoodSheet,
+                        itemName: { $0.name },
+                        rowDestination: { FoodDetailInfo(food: $0) },
+                        allItemsView: { AllItemListView(
+                            title: "所有食物",
+                            items: foods,
+                            toDetail: { food in FoodDetailInfo(food: food) },
+                            delete: { indexSet in
+                                for index in indexSet {
+                                    context.delete(foods[index])
+                                }
+                            },
+                            filename: "food_data",
+                            itemCountDescription: { types, total in
+                                "共 \(types) 类，\(total) 个食物"
+                            }
+                        )},
+                        addItemView: {
+                            AddNewFoodView { newFood in context.insert(newFood) }
                         }
-                    }
-                    NavigationLink("所有食物") {
-                        AllFoodView()
-                    }
-                } header: {
-                    Text("食物")
-                        .font(.title2)
-                        .bold()
-                        .foregroundColor(.primary)
-                        .textCase(nil)
-                        .padding(.top, 8)
+                    )
                 }
-                Section {
-                    Button {
-                        showAddClothingSheet = true
-                    } label: {
-                        Text("添加新物品")
-                    }
-                    ForEach(clothing.prefix(6), id: \.id) { clothing in
-                        NavigationLink("\(clothing.name)") {
-                            ClothingDetailInfo(clothing: clothing)
+                VStack(spacing: 16) {
+                    WarehouseViewDivide(
+                        title: "衣物",
+                        items: clothing.sorted { $0.recordDate > $1.recordDate },
+                        showAddSheet: $showAddClothingSheet,
+                        itemName: { $0.name },
+                        rowDestination: { ClothingDetailInfo(clothing: $0) },
+                        allItemsView: { AllItemListView(
+                            title: "所有衣物",
+                            items: clothing,
+                            toDetail: { clothing in ClothingDetailInfo(clothing: clothing) },
+                            delete: { indexSet in
+                                for index in indexSet {
+                                    context.delete(clothing[index])
+                                }
+                            },
+                            filename: "clothing_data",
+                            itemCountDescription: { types, total in
+                                "共 \(types) 类，\(total) 个衣物"
+                            }
+                        )},
+                        addItemView: {
+                            AddNewClothingView { newClothing in context.insert(newClothing) }
                         }
-                    }
-                    NavigationLink("所有衣物") {
-                        AllClothingView()
-                    }
-                } header: {
-                    Text("衣物")
-                        .font(.title2)
-                        .bold()
-                        .foregroundColor(.primary)
-                        .textCase(nil)
-                        .padding(.top, 8)
+                    )
                 }
-                Section {
-                    Button {
-                        showAddWareSheet = true
-                    } label: {
-                        Text("添加新物品")
-                    }
-                    ForEach(wares.prefix(6), id: \.id) { ware in
-                        NavigationLink("\(ware.name)") {
-                            WareDetailInfo(ware: ware)
+                VStack(spacing: 16) {
+                    WarehouseViewDivide(
+                        title: "杂物",
+                        items: wares.sorted { $0.recordDate > $1.recordDate },
+                        showAddSheet: $showAddWareSheet,
+                        itemName: { $0.name },
+                        rowDestination: { WareDetailInfo(ware: $0) },
+                        allItemsView: { AllItemListView(
+                            title: "所有杂物",
+                            items: wares,
+                            toDetail: { ware in WareDetailInfo(ware: ware) },
+                            delete: { indexSet in
+                                for index in indexSet {
+                                    context.delete(wares[index])
+                                }
+                            },
+                            filename: "ware_data",
+                            itemCountDescription: { types, total in
+                                "共 \(types) 类，\(total) 个杂物"
+                            }
+                        )},
+                        addItemView: {
+                            AddNewWareView { newWare in context.insert(newWare) }
                         }
-                    }
-                    NavigationLink("所有杂物") {
-                        AllWareView()
-                    }
-                } header: {
-                    Text("杂物")
-                        .font(.title2)
-                        .bold()
-                        .foregroundColor(.primary)
-                        .textCase(nil)
-                        .padding(.top, 8)
+                    )
                 }
             }
             .sheet(isPresented: $showAddWareSheet) {
@@ -111,5 +123,5 @@ struct WarehouseView: View {
 
 #Preview {
     WarehouseView()
-        .modelContainer(for: [Ware.self, Clothing.self, Food.self], inMemory: true)
+        .modelContainer(for: [Ware.self, Clothing.self, Food.self], inMemory: false)
 }

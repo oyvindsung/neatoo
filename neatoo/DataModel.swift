@@ -15,7 +15,7 @@ class Ware: Identifiable {
     var brand: String
     var category: String
     var name: String
-    var number: Double
+    var number: Int
     var price: Double
     var priority: Int
     var purchaseDate: Date
@@ -23,7 +23,7 @@ class Ware: Identifiable {
     var recordDate: Date
     var wareDescription: String
 
-    init(id: UUID = UUID(), brand: String, category: String, name: String, number: Double, price: Double, priority: Int, purchaseDate: Date, purchaseFrom: String, recordDate: Date, wareDescription: String) {
+    init(id: UUID = UUID(), brand: String, category: String, name: String, number: Int, price: Double, priority: Int, purchaseDate: Date, purchaseFrom: String, recordDate: Date, wareDescription: String) {
         self.id = id
         self.brand = brand
         self.category = category
@@ -68,13 +68,13 @@ class Food: Identifiable {
     var category: String
     var foodDescription: String
     var name: String
-    var number: Double
+    var number: Int
     var price: Double
     var purchaseDate: Date
     var purchaseFrom: String
     var recordDate: Date
     
-    init(id: UUID = UUID(), bestBefore: Date, brand: String, category: String, foodDescription: String, name: String, number: Double, price: Double, purchaseDate: Date, purchaseFrom: String, recordDate: Date) {
+    init(id: UUID = UUID(), bestBefore: Date, brand: String, category: String, foodDescription: String, name: String, number: Int, price: Double, purchaseDate: Date, purchaseFrom: String, recordDate: Date) {
         self.id = id
         self.bestBefore = bestBefore
         self.brand = brand
@@ -119,7 +119,7 @@ class Clothing: Identifiable {
     var clothingDescription: String
     var color: String
     var name: String
-    var number: Double
+    var number: Int
     var price: Double
     var priority: Int
     var purchaseDate: Date
@@ -127,7 +127,7 @@ class Clothing: Identifiable {
     var recordDate: Date
     var season: [String]
 
-    init(id: UUID = UUID(), brand: String, category: String, clothingDescription: String, color: String, name: String, number: Double, price: Double, priority: Int, purchaseDate: Date, purchaseFrom: String, recordDate: Date, season: [String]) {
+    init(id: UUID = UUID(), brand: String, category: String, clothingDescription: String, color: String, name: String, number: Int, price: Double, priority: Int, purchaseDate: Date, purchaseFrom: String, recordDate: Date, season: [String]) {
         self.id = id
         self.brand = brand
         self.category = category

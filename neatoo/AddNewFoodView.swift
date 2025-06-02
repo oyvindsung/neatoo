@@ -17,7 +17,7 @@ struct AddNewFoodView: View {
     @State private var category: String = ""
     @State private var foodDescription: String = ""
     @State private var name: String = ""
-    @State private var number: Double = 0
+    @State private var number: Int = 0
     @State private var price: Double = 0
     @State private var purchaseDate: Date = {
         var components = DateComponents()

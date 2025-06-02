@@ -86,7 +86,7 @@ struct AddNewClothingView: View {
     @State private var clothingDescription: String = ""
     @State private var color: String = ""
     @State private var name: String = ""
-    @State private var number: Double = 0
+    @State private var number: Int = 0
     @State private var price: Double = 0
     @State private var priority: Int = 0
     @State private var purchaseDate: Date = {

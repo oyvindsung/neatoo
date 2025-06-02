@@ -11,18 +11,24 @@ import SwiftData
 struct AppTabView: View {
     var body: some View {
         TabView {
-            Tab("资产", systemImage: "wallet.bifold.fill") {
+            NavigationStack {
                 FinanceView()
             }
-
-            Tab("时间", systemImage: "clock.fill") {
+            .tabItem {
+                Image(systemName: "wallet.bifold.fill")
+            }
+            NavigationStack {
                 TimeView()
             }
-
-
-            Tab("仓库", systemImage: "archivebox.fill") {
+            .tabItem {
+                Image(systemName: "clock.fill")
+            }
+            NavigationStack {
                 WarehouseView()
                     .modelContainer(for: [Ware.self, Clothing.self, Food.self])
+            }
+            .tabItem {
+                Image(systemName: "archivebox.fill")
             }
         }
 
