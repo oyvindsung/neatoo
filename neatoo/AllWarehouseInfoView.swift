@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct AllItemListView<Item: Identifiable & Encodable, DetailView: View>: View {
+struct AllItemListView<Item: Identifiable & Codable, DetailView: View>: View {
     let title: String
     let items: [Item]
     let toDetail: (Item) -> DetailView

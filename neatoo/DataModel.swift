@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-class Ware: Identifiable {
+final class Ware: Identifiable {
     var id = UUID()
     
     var brand: String
@@ -38,7 +38,7 @@ class Ware: Identifiable {
     }
 }
 
-extension Ware: Encodable {
+extension Ware: Codable {
     enum CodingKeys: String, CodingKey {
         case id, brand, category, name, number, price, priority, purchaseDate, purchaseFrom, recordDate, wareDescription
     }
@@ -57,10 +57,61 @@ extension Ware: Encodable {
         try container.encode(recordDate, forKey: .recordDate)
         try container.encode(wareDescription, forKey: .wareDescription)
     }
+
+    convenience init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let id = try container.decode(UUID.self, forKey: .id)
+        let brand = try container.decode(String.self, forKey: .brand)
+        let category = try container.decode(String.self, forKey: .category)
+        let name = try container.decode(String.self, forKey: .name)
+        let number = try container.decode(Int.self, forKey: .number)
+        let price = try container.decode(Double.self, forKey: .price)
+        let priority = try container.decode(Int.self, forKey: .priority)
+        let purchaseDate = try container.decode(Date.self, forKey: .purchaseDate)
+        let purchaseFrom = try container.decode(String.self, forKey: .purchaseFrom)
+        let recordDate = try container.decode(Date.self, forKey: .recordDate)
+        let wareDescription = try container.decode(String.self, forKey: .wareDescription)
+
+        self.init(
+            id: id,
+            brand: brand,
+            category: category,
+            name: name,
+            number: number,
+            price: price,
+            priority: priority,
+            purchaseDate: purchaseDate,
+            purchaseFrom: purchaseFrom,
+            recordDate: recordDate,
+            wareDescription: wareDescription
+        )
+    }
 }
+//
+//
+//extension Ware: Encodable {
+//    enum CodingKeys: String, CodingKey {
+//        case id, brand, category, name, number, price, priority, purchaseDate, purchaseFrom, recordDate, wareDescription
+//    }
+//
+//    func encode(to encoder: Encoder) throws {
+//        var container = encoder.container(keyedBy: CodingKeys.self)
+//        try container.encode(id, forKey: .id)
+//        try container.encode(brand, forKey: .brand)
+//        try container.encode(category, forKey: .category)
+//        try container.encode(name, forKey: .name)
+//        try container.encode(number, forKey: .number)
+//        try container.encode(price, forKey: .price)
+//        try container.encode(priority, forKey: .priority)
+//        try container.encode(purchaseDate, forKey: .purchaseDate)
+//        try container.encode(purchaseFrom, forKey: .purchaseFrom)
+//        try container.encode(recordDate, forKey: .recordDate)
+//        try container.encode(wareDescription, forKey: .wareDescription)
+//    }
+//}
 
 @Model
-class Food: Identifiable {
+final class Food: Identifiable {
     var id = UUID()
     
     var bestBefore: Date
@@ -89,7 +140,7 @@ class Food: Identifiable {
     }
 }
 
-extension Food: Encodable {
+extension Food: Codable {
     enum CodingKeys: String, CodingKey {
         case id, bestBefore, brand, category, foodDescription, name, number, price, purchaseDate, purchaseFrom, recordDate
     }
@@ -108,10 +159,39 @@ extension Food: Encodable {
         try container.encode(purchaseFrom, forKey: .purchaseFrom)
         try container.encode(recordDate, forKey: .recordDate)
     }
+    
+    convenience init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let id = try container.decode(UUID.self, forKey: .id)
+        let bestBefore = try container.decode(Date.self, forKey: .bestBefore)
+        let brand = try container.decode(String.self, forKey: .brand)
+        let category = try container.decode(String.self, forKey: .category)
+        let foodDescription = try container.decode(String.self, forKey: .foodDescription)
+        let name = try container.decode(String.self, forKey: .name)
+        let number = try container.decode(Int.self, forKey: .number)
+        let price = try container.decode(Double.self, forKey: .price)
+        let purchaseDate = try container.decode(Date.self, forKey: .purchaseDate)
+        let purchaseFrom = try container.decode(String.self, forKey: .purchaseFrom)
+        let recordDate = try container.decode(Date.self, forKey: .recordDate)
+
+        self.init(
+            id: id,
+            bestBefore: bestBefore,
+            brand: brand,
+            category: category,
+            foodDescription: foodDescription,
+            name: name,
+            number: number,
+            price: price,
+            purchaseDate: purchaseDate,
+            purchaseFrom: purchaseFrom,
+            recordDate: recordDate
+        )
+    }
 }
 
 @Model
-class Clothing: Identifiable {
+final class Clothing: Identifiable {
     var id = UUID()
     
     var brand: String
@@ -144,7 +224,7 @@ class Clothing: Identifiable {
     }
 }
 
-extension Clothing: Encodable {
+extension Clothing: Codable {
     enum CodingKeys: String, CodingKey {
         case id, brand, category, clothingDescription, color, name, number, price, priority, purchaseDate, purchaseFrom, recordDate, season
     }
@@ -164,6 +244,39 @@ extension Clothing: Encodable {
         try container.encode(purchaseFrom, forKey: .purchaseFrom)
         try container.encode(recordDate, forKey: .recordDate)
         try container.encode(season, forKey: .season)
+    }
+    
+    convenience init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let id = try container.decode(UUID.self, forKey: .id)
+        let brand = try container.decode(String.self, forKey: .brand)
+        let category = try container.decode(String.self, forKey: .category)
+        let clothingDescription = try container.decode(String.self, forKey: .clothingDescription)
+        let color = try container.decode(String.self, forKey: .color)
+        let name = try container.decode(String.self, forKey: .name)
+        let number = try container.decode(Int.self, forKey: .number)
+        let price = try container.decode(Double.self, forKey: .price)
+        let priority = try container.decode(Int.self, forKey: .priority)
+        let purchaseDate = try container.decode(Date.self, forKey: .purchaseDate)
+        let purchaseFrom = try container.decode(String.self, forKey: .purchaseFrom)
+        let recordDate = try container.decode(Date.self, forKey: .recordDate)
+        let season = try container.decode([String].self, forKey: .season)
+
+        self.init(
+            id: id,
+            brand: brand,
+            category: category,
+            clothingDescription: clothingDescription,
+            color: color,
+            name: name,
+            number: number,
+            price: price,
+            priority: priority,
+            purchaseDate: purchaseDate,
+            purchaseFrom: purchaseFrom,
+            recordDate: recordDate,
+            season: season
+        )
     }
 }
 

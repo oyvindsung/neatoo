@@ -8,6 +8,15 @@
 import SwiftUI
 import SwiftData
 
+enum ImportType: String, CaseIterable, Identifiable {
+    case ware = "Ware"
+    case food = "Food"
+    case clothing = "Clothing"
+
+    var id: String { self.rawValue }
+}
+
+
 struct WarehouseView: View {
     @Query private var wares: [Ware]
     @Query private var clothing: [Clothing]
@@ -18,6 +27,9 @@ struct WarehouseView: View {
     @State private var showAddWareSheet = false
     @State private var showAddClothingSheet = false
     @State private var showAddFoodSheet = false
+    @State private var showImportTypePicker = false
+    @State private var selectedImportType: ImportType? = nil
+    @State private var isImporting = false
     
     var body: some View {
         NavigationStack {
@@ -114,6 +126,63 @@ struct WarehouseView: View {
             .sheet(isPresented: $showAddClothingSheet) {
                 AddNewClothingView { newClothing in
                     context.insert(newClothing)
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showImportTypePicker = true
+                    } label: {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
+            .confirmationDialog("选择导入的数据类型", isPresented: $showImportTypePicker, titleVisibility: .visible) {
+                ForEach(ImportType.allCases) { type in
+                    Button(type.rawValue) {
+                        selectedImportType = type
+                        isImporting = true
+                    }
+                }
+                Button("取消", role: .cancel) { }
+            }
+            .fileImporter(
+                isPresented: $isImporting,
+                allowedContentTypes: [.json]
+            ) { result in
+                do {
+                    let fileURL = try result.get()
+                    guard fileURL.startAccessingSecurityScopedResource() else {
+                        print("没有读取权限")
+                        return
+                    }
+                    defer { fileURL.stopAccessingSecurityScopedResource() }
+                    
+                    let data = try Data(contentsOf: fileURL)
+                    let decoder = JSONDecoder()
+                    decoder.dateDecodingStrategy = .iso8601
+
+                    switch selectedImportType {
+                    case .ware:
+                        let decodedItems = try decoder.decode([Ware].self, from: data)
+                        for item in decodedItems {
+                            context.insert(item)
+                        }
+                    case .food:
+                        let decodedItems = try decoder.decode([Food].self, from: data)
+                        for item in decodedItems {
+                            context.insert(item)
+                        }
+                    case .clothing:
+                        let decodedItems = try decoder.decode([Clothing].self, from: data)
+                        for item in decodedItems {
+                            context.insert(item)
+                        }
+                    case .none:
+                        print("No import type selected")
+                    }
+                } catch {
+                    print("Import failed: \(error)")
                 }
             }
             .navigationTitle("仓库")
