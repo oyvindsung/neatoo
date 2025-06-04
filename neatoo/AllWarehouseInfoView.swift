@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView: View>: View {
+    //MARK: - parameters
     let title: String
     let items: [Item]
     let itemName: (Item) -> String
@@ -20,14 +21,13 @@ struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView:
     @State private var editMode: EditMode = .inactive
     @State private var exportData: Data?
     @State private var isExporting = false
-    
     @State private var selectedCategory: String = "全部"
 
     var categories: [String] {
         let all = items.map(\.category)
         return ["全部"] + Array(Set(all)).sorted()
     }
-
+    
     var filteredItems: [Item] {
         if selectedCategory == "全部" {
             return items
@@ -36,28 +36,63 @@ struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView:
         }
     }
     
+    // MARK: - functions
+    private func exportItems() {
+        do {
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            encoder.dateEncodingStrategy = .iso8601
+            exportData = try encoder.encode(items)
+            isExporting = true
+        } catch {
+            print("Export failed: \(error)")
+        }
+    }
+    
+    private func itemName(from item: Item) -> String {
+        (item as? Ware)?.name ?? "Item"
+    }
+    
+    private func itemCount(from item: Item) -> Int {
+        (item as? Ware).map { Int($0.number) } ?? 1
+    }
+    
+    // MARK: - view
     var body: some View {
         NavigationStack {
-            HStack {
-                Spacer()
-                Picker("筛选", selection: $selectedCategory) {
-                    ForEach(categories, id: \.self) { cat in
-                        Text(cat).tag(cat)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-            }
-            .padding(.horizontal)
             List {
-                ForEach(filteredItems) { item in
-                    NavigationLink("\(itemName(item))") {
-                        toDetail(item)
+                Section {
+                    HStack {
+                        Picker("筛选", selection: $selectedCategory) {
+                            ForEach(categories, id: \.self) { cat in
+                                Text(cat).tag(cat)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        Spacer()
                     }
+                    .padding(.horizontal)
+                    .listRowInsets(EdgeInsets())
                 }
-                .onDelete(perform: delete)
-                Text("共 " + "\(filteredItems.count)" + " 类，" + "\(filteredItems.reduce(0) { $0 + (itemCount(from: $1)) })" + " 个")
+                Section {
+                    ForEach(filteredItems) { item in
+                        NavigationLink("\(itemName(item))") {
+                            toDetail(item)
+                        }
+                    }
+                    .onDelete(perform: delete)
+                    .padding(.horizontal)
+                }
+                .listRowInsets(EdgeInsets())
+                Section {
+                    Text("共 " + "\(filteredItems.count)" + " 类，" + "\(filteredItems.reduce(0) { $0 + (itemCount(from: $1)) })" + " 个")
+                        .listRowInsets(EdgeInsets())
+                        .padding(.horizontal)
+                }
             }
+            .listSectionSpacing(12)
             .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
             .environment(\.editMode, $editMode)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -88,28 +123,5 @@ struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView:
                 }
             }
         }
-    }
-    
-    // MARK: - Helpers
-    
-    private func exportItems() {
-        do {
-            let encoder = JSONEncoder()
-            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
-            encoder.dateEncodingStrategy = .iso8601
-            exportData = try encoder.encode(items)
-            isExporting = true
-        } catch {
-            print("Export failed: \(error)")
-        }
-    }
-    
-    // These can be specialized via override/extension if needed
-    private func itemName(from item: Item) -> String {
-        (item as? Ware)?.name ?? "Item"
-    }
-    
-    private func itemCount(from item: Item) -> Int {
-        (item as? Ware).map { Int($0.number) } ?? 1
     }
 }

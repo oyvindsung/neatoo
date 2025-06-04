@@ -117,7 +117,7 @@ struct AddNewFoodView: View {
                         
                         dismiss()
                     }
-                    .disabled(name.isEmpty || number <= 0 || price < 0)
+                    .disabled(name.isEmpty || number <= 0 || price < 0 || category == "")
                 }
             }
         }

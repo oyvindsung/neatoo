@@ -58,18 +58,18 @@ struct ClothingDetailInfo: View {
                 HStack {
                     Text("季节")
                     Spacer()
-                    VStack {
+                    HStack {
                         if clothing.seasons.contains("Spring") {
                             Text("春")
                         }
                         if clothing.seasons.contains("Summer") {
-                            Text("/夏")
+                            Text("夏")
                         }
                         if clothing.seasons.contains("Autumn") {
-                            Text("/秋")
+                            Text("秋")
                         }
                         if clothing.seasons.contains("Winter") {
-                            Text("/冬")
+                            Text("冬")
                         }
                     }
                 }

@@ -189,6 +189,7 @@ struct WarehouseView: View {
                 }
             }
             .navigationTitle("仓库")
+            .padding(.top)
         }
     }
 }

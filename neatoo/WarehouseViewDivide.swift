@@ -33,6 +33,8 @@ struct WarehouseViewDivide<Item, RowView: View, AddView: View, AllItemsView: Vie
                         .foregroundColor(.accent)
                 }
             }
+            .padding(.horizontal)
+            .padding(.top)
             
             ForEach(Array(items.prefix(maxCount)).indices, id: \.self) { index in
                 let item = items[index]
@@ -41,27 +43,55 @@ struct WarehouseViewDivide<Item, RowView: View, AddView: View, AllItemsView: Vie
                         .foregroundColor(.primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.vertical, 4)
+                        .padding(.horizontal)
                         .contentShape(Rectangle())
                 }
             }
             
             NavigationLink(destination: allItemsView()) {
-                Text("所有\(title)")
+                Text("显示全部")
                     .foregroundColor(.accent)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, 4)
             }
+            .padding(.horizontal)
+            .padding(.bottom)
         }
-        .padding()
-        .background(Color(.systemBackground))
-        .cornerRadius(16)
-        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 4)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(.secondarySystemBackground))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                )
+        )
+        .padding(.horizontal)
+        .padding(.bottom, 4)
         .sheet(isPresented: showAddSheet) {
             addItemView()
         }
-        .padding(.horizontal)
-        .padding(.top)
     }
 }
 
+#Preview {
+    WarehouseViewDivide<Ware, Text, Text, Text>(
+        title: "电器",
+        items: [
+            Ware(id: UUID(), brand: "", category: "厨具", name: "Spoon", number: 2, price: 3, priority: 3, purchaseDate: .now, purchaseFrom: "", recordDate: .now, wareDescription: ""),
+            Ware(id: UUID(), brand: "", category: "厨具", name: "Spoon", number: 2, price: 3, priority: 3, purchaseDate: .now, purchaseFrom: "", recordDate: .now, wareDescription: ""),
+            Ware(id: UUID(), brand: "", category: "厨具", name: "Spoon", number: 2, price: 3, priority: 3, purchaseDate: .now, purchaseFrom: "", recordDate: .now, wareDescription: "")
+        ],
+        showAddSheet: .constant(false),
+        itemName: { $0.name },
+        rowDestination: { ware in
+            Text("查看：\(ware.name)")
+        },
+        allItemsView: {
+            Text("所有电器")
+        },
+        addItemView: {
+            Text("添加新电器")
+        }
+    )
+}
 
