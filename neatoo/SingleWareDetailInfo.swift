@@ -4,16 +4,19 @@ import SwiftData
 struct WareDetailInfo: View {
     let ware: Ware
     
-    //    var brand: String
-    //    var category: String
-    //    var name: String
-    //    var number: Double
-    //    var price: Double
-    //    var priority: Int
-    //    var purchaseDate: Date
-    //    var purchaseFrom: String
-    //    var recordDate: Date
-    //    var wareDescription: String
+    private var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd hh:mm"
+        return dateFormatter
+    }
+    
+    private var numberFormatter: NumberFormatter {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.minimumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = 2
+        return numberFormatter
+    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -40,7 +43,7 @@ struct WareDetailInfo: View {
                 HStack {
                     Text("价格")
                     Spacer()
-                    Text("\(ware.price)")
+                    Text("¥".appending(numberFormatter.string(from: ware.price as NSNumber) ?? "0"))
                 }
                 HStack {
                     Text("类别")
@@ -58,12 +61,12 @@ struct WareDetailInfo: View {
                 HStack {
                     Text("何时购入")
                     Spacer()
-                    Text("\(ware.purchaseDate)")
+                    Text(dateFormatter.string(from: ware.purchaseDate))
                 }
                 HStack {
                     Text("何时记录")
                     Spacer()
-                    Text("\(ware.recordDate)")
+                    Text(dateFormatter.string(from: ware.recordDate))
                 }
                 HStack {
                     Text("购于何地")

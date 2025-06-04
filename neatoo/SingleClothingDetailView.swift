@@ -4,18 +4,19 @@ import SwiftData
 struct ClothingDetailInfo: View {
     let clothing: Clothing
     
-    //    var brand: String
-    //    var category: String
-    //    var clothingDescription: String
-    //    var color: String
-    //    var name: String
-    //    var number: Double
-    //    var price: Double
-    //    var priority: Int
-    //    var purchaseDate: Date
-    //    var purchaseFrom: String
-    //    var recordDate: Date
-    //    var season: [String]
+    private var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd hh:mm"
+        return dateFormatter
+    }
+    
+    private var numberFormatter: NumberFormatter {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.minimumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = 2
+        return numberFormatter
+    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -47,7 +48,7 @@ struct ClothingDetailInfo: View {
                 HStack {
                     Text("价格")
                     Spacer()
-                    Text("\(clothing.price)")
+                    Text("¥".appending(numberFormatter.string(from: clothing.price as NSNumber) ?? "0"))
                 }
                 HStack {
                     Text("类别")
@@ -57,17 +58,30 @@ struct ClothingDetailInfo: View {
                 HStack {
                     Text("季节")
                     Spacer()
-                    Text("\(clothing.season)")
+                    VStack {
+                        if clothing.seasons.contains("Spring") {
+                            Text("春")
+                        }
+                        if clothing.seasons.contains("Summer") {
+                            Text("/夏")
+                        }
+                        if clothing.seasons.contains("Autumn") {
+                            Text("/秋")
+                        }
+                        if clothing.seasons.contains("Winter") {
+                            Text("/冬")
+                        }
+                    }
                 }
                 HStack {
                     Text("何时购入")
                     Spacer()
-                    Text("\(clothing.purchaseDate)")
+                    Text(dateFormatter.string(from: clothing.purchaseDate))
                 }
                 HStack {
                     Text("何时记录")
                     Spacer()
-                    Text("\(clothing.recordDate)")
+                    Text(dateFormatter.string(from: clothing.recordDate))
                 }
                 HStack {
                     Text("购于何地")

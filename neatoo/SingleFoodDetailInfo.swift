@@ -4,16 +4,19 @@ import SwiftData
 struct FoodDetailInfo: View {
     let food: Food
     
-    //    var bestBefore: Date
-    //    var brand: String
-    //    var category: String
-    //    var foodDescription: String
-    //    var name: String
-    //    var number: Double
-    //    var price: Double
-    //    var purchaseDate: Date
-    //    var purchaseFrom: String
-    //    var recordDate: Date
+    private var dateFormatter: DateFormatter {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd hh:mm"
+        return dateFormatter
+    }
+    
+    private var numberFormatter: NumberFormatter {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.minimumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = 2
+        return numberFormatter
+    }
+
     var body: some View {
         NavigationStack {
             List {
@@ -30,7 +33,7 @@ struct FoodDetailInfo: View {
                 HStack {
                     Text("有效期至")
                     Spacer()
-                    Text("\(food.bestBefore)")
+                    Text(dateFormatter.string(from: food.bestBefore))
                 }
                 HStack {
                     Text("品牌")
@@ -45,7 +48,7 @@ struct FoodDetailInfo: View {
                 HStack {
                     Text("价格")
                     Spacer()
-                    Text("\(food.price)")
+                    Text("¥".appending(numberFormatter.string(from: food.price as NSNumber) ?? "0"))
                 }
                 HStack {
                     Text("类别")
@@ -55,12 +58,12 @@ struct FoodDetailInfo: View {
                 HStack {
                     Text("何时购入")
                     Spacer()
-                    Text("\(food.purchaseDate)")
+                    Text(dateFormatter.string(from: food.purchaseDate))
                 }
                 HStack {
                     Text("何时记录")
                     Spacer()
-                    Text("\(food.recordDate)")
+                    Text(dateFormatter.string(from: food.recordDate))
                 }
                 HStack {
                     Text("购于何地")

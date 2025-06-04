@@ -8,9 +8,10 @@
 import SwiftUI
 import SwiftData
 
-struct AllItemListView<Item: Identifiable & Codable, DetailView: View>: View {
+struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView: View>: View {
     let title: String
     let items: [Item]
+    let itemName: (Item) -> String
     let toDetail: (Item) -> DetailView
     let delete: (IndexSet) -> Void
     let filename: String
@@ -20,15 +21,41 @@ struct AllItemListView<Item: Identifiable & Codable, DetailView: View>: View {
     @State private var exportData: Data?
     @State private var isExporting = false
     
+    @State private var selectedCategory: String = "全部"
+
+    var categories: [String] {
+        let all = items.map(\.category)
+        return ["全部"] + Array(Set(all)).sorted()
+    }
+
+    var filteredItems: [Item] {
+        if selectedCategory == "全部" {
+            return items
+        } else {
+            return items.filter { $0.category == selectedCategory }
+        }
+    }
+    
     var body: some View {
         NavigationStack {
+            HStack {
+                Spacer()
+                Picker("筛选", selection: $selectedCategory) {
+                    ForEach(categories, id: \.self) { cat in
+                        Text(cat).tag(cat)
+                    }
+                }
+                .pickerStyle(MenuPickerStyle())
+            }
+            .padding(.horizontal)
             List {
-                ForEach(items, id: \.id) { item in
-                    NavigationLink("\(itemName(from: item))") {
+                ForEach(filteredItems) { item in
+                    NavigationLink("\(itemName(item))") {
                         toDetail(item)
                     }
                 }
                 .onDelete(perform: delete)
+                Text("共 " + "\(filteredItems.count)" + " 类，" + "\(filteredItems.reduce(0) { $0 + (itemCount(from: $1)) })" + " 个")
             }
             .navigationTitle(title)
             .environment(\.editMode, $editMode)
@@ -50,12 +77,6 @@ struct AllItemListView<Item: Identifiable & Codable, DetailView: View>: View {
                     }
                 }
             }
-            .safeAreaInset(edge: .bottom, content: {
-                Text(itemCountDescription(items.count, items.reduce(0) { $0 + (itemCount(from: $1)) }))
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(.ultraThinMaterial)
-            })
             .fileExporter(
                 isPresented: $isExporting,
                 document: JSONExportDocument(data: exportData ?? Data()),

@@ -37,5 +37,5 @@ struct AppTabView: View {
 
 #Preview {
     AppTabView()
-        .modelContainer(for: [Ware.self, Clothing.self, Food.self], inMemory: true)
+        .modelContainer(for: [Ware.self, Clothing.self, Food.self])
 }

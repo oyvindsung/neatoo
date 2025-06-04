@@ -44,6 +44,7 @@ struct WarehouseView: View {
                         allItemsView: { AllItemListView(
                             title: "所有食物",
                             items: foods,
+                            itemName: { $0.name },
                             toDetail: { food in FoodDetailInfo(food: food) },
                             delete: { indexSet in
                                 for index in indexSet {
@@ -70,6 +71,7 @@ struct WarehouseView: View {
                         allItemsView: { AllItemListView(
                             title: "所有衣物",
                             items: clothing,
+                            itemName: { $0.name },
                             toDetail: { clothing in ClothingDetailInfo(clothing: clothing) },
                             delete: { indexSet in
                                 for index in indexSet {
@@ -96,6 +98,7 @@ struct WarehouseView: View {
                         allItemsView: { AllItemListView(
                             title: "所有杂物",
                             items: wares,
+                            itemName: { $0.name },
                             toDetail: { ware in WareDetailInfo(ware: ware) },
                             delete: { indexSet in
                                 for index in indexSet {
@@ -192,5 +195,5 @@ struct WarehouseView: View {
 
 #Preview {
     WarehouseView()
-        .modelContainer(for: [Ware.self, Clothing.self, Food.self], inMemory: false)
+        .modelContainer(for: [Ware.self, Clothing.self, Food.self])
 }

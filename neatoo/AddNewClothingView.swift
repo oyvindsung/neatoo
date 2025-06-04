@@ -157,7 +157,7 @@ struct AddNewClothingView: View {
                         }
                     }
                     .pickerStyle(MenuPickerStyle())
-                    // season
+                    // seasons
                     // spring
                     Toggle("春季", isOn: $springSelected)
                         .toggleStyle(SwitchToggleStyle(tint: .accent))
@@ -222,7 +222,7 @@ struct AddNewClothingView: View {
                         if winterSelected {
                             selectedSeasons.append("Winter")
                         }
-                        let clothing = Clothing(brand: brand, category: selectedMinorCategory.rawValue, clothingDescription: clothingDescription, color: color, name: name, number: number, price: price, priority: priority, purchaseDate: purchaseDate, purchaseFrom: purchaseFrom, recordDate: recordDate, season: selectedSeasons)
+                        let clothing = Clothing(brand: brand, category: selectedMinorCategory.rawValue, clothingDescription: clothingDescription, color: color, name: name, number: number, price: price, priority: priority, purchaseDate: purchaseDate, purchaseFrom: purchaseFrom, recordDate: recordDate, seasons: selectedSeasons)
                         onAdd(clothing)
                         
                         dismiss()

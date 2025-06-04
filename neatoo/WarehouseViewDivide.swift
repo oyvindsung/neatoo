@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct WarehouseViewDivide<Item, RowView: View, AddView: View, AllItemsView: View>: View {
+    
     var title: String
     var items: [Item]
     var maxCount: Int = 6
@@ -16,38 +17,51 @@ struct WarehouseViewDivide<Item, RowView: View, AddView: View, AllItemsView: Vie
     var rowDestination: (Item) -> RowView
     var allItemsView: () -> AllItemsView
     var addItemView: () -> AddView
-
+    
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text(title)
                     .font(.title2)
                     .bold()
-                    .foregroundColor(.primary)
                 Spacer()
                 Button(action: {
                     showAddSheet.wrappedValue = true
                 }) {
-                    Image(systemName: "plus")
+                    Image(systemName: "plus.circle.fill")
+                        .imageScale(.large)
+                        .foregroundColor(.accent)
                 }
             }
-            .padding(.horizontal)
-            List {
-                ForEach(Array(items.prefix(maxCount)).indices, id: \.self) { index in
-                    let item = items[index]
-                    NavigationLink(destination: rowDestination(item)) {
-                        Text(itemName(item))
-                    }
+            
+            ForEach(Array(items.prefix(maxCount)).indices, id: \.self) { index in
+                let item = items[index]
+                NavigationLink(destination: rowDestination(item)) {
+                    Text(itemName(item))
+                        .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 4)
+                        .contentShape(Rectangle())
                 }
-                NavigationLink("所有\(title)", destination: allItemsView())
             }
-            .frame(height: CGFloat(min(items.count, maxCount) + 1) * 44)
-            .listStyle(PlainListStyle())
+            
+            NavigationLink(destination: allItemsView()) {
+                Text("所有\(title)")
+                    .foregroundColor(.accent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, 4)
+            }
         }
+        .padding()
+        .background(Color(.systemBackground))
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 4)
         .sheet(isPresented: showAddSheet) {
             addItemView()
         }
+        .padding(.horizontal)
         .padding(.top)
     }
 }
+
 

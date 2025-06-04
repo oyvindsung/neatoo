@@ -8,8 +8,12 @@
 import Foundation
 import SwiftData
 
+protocol Categorizable {
+    var category: String { get }
+}
+
 @Model
-final class Ware: Identifiable {
+final class Ware: Identifiable, Categorizable {
     var id = UUID()
     
     var brand: String
@@ -87,31 +91,9 @@ extension Ware: Codable {
         )
     }
 }
-//
-//
-//extension Ware: Encodable {
-//    enum CodingKeys: String, CodingKey {
-//        case id, brand, category, name, number, price, priority, purchaseDate, purchaseFrom, recordDate, wareDescription
-//    }
-//
-//    func encode(to encoder: Encoder) throws {
-//        var container = encoder.container(keyedBy: CodingKeys.self)
-//        try container.encode(id, forKey: .id)
-//        try container.encode(brand, forKey: .brand)
-//        try container.encode(category, forKey: .category)
-//        try container.encode(name, forKey: .name)
-//        try container.encode(number, forKey: .number)
-//        try container.encode(price, forKey: .price)
-//        try container.encode(priority, forKey: .priority)
-//        try container.encode(purchaseDate, forKey: .purchaseDate)
-//        try container.encode(purchaseFrom, forKey: .purchaseFrom)
-//        try container.encode(recordDate, forKey: .recordDate)
-//        try container.encode(wareDescription, forKey: .wareDescription)
-//    }
-//}
 
 @Model
-final class Food: Identifiable {
+final class Food: Identifiable, Categorizable {
     var id = UUID()
     
     var bestBefore: Date
@@ -191,7 +173,7 @@ extension Food: Codable {
 }
 
 @Model
-final class Clothing: Identifiable {
+final class Clothing: Identifiable, Categorizable {
     var id = UUID()
     
     var brand: String
@@ -205,9 +187,9 @@ final class Clothing: Identifiable {
     var purchaseDate: Date
     var purchaseFrom: String
     var recordDate: Date
-    var season: [String]
+    var seasons: [String]
 
-    init(id: UUID = UUID(), brand: String, category: String, clothingDescription: String, color: String, name: String, number: Int, price: Double, priority: Int, purchaseDate: Date, purchaseFrom: String, recordDate: Date, season: [String]) {
+    init(id: UUID = UUID(), brand: String, category: String, clothingDescription: String, color: String, name: String, number: Int, price: Double, priority: Int, purchaseDate: Date, purchaseFrom: String, recordDate: Date, seasons: [String]) {
         self.id = id
         self.brand = brand
         self.category = category
@@ -220,13 +202,13 @@ final class Clothing: Identifiable {
         self.purchaseDate = purchaseDate
         self.purchaseFrom = purchaseFrom
         self.recordDate = recordDate
-        self.season = season
+        self.seasons = seasons
     }
 }
 
 extension Clothing: Codable {
     enum CodingKeys: String, CodingKey {
-        case id, brand, category, clothingDescription, color, name, number, price, priority, purchaseDate, purchaseFrom, recordDate, season
+        case id, brand, category, clothingDescription, color, name, number, price, priority, purchaseDate, purchaseFrom, recordDate, seasons
     }
 
     func encode(to encoder: Encoder) throws {
@@ -243,7 +225,7 @@ extension Clothing: Codable {
         try container.encode(purchaseDate, forKey: .purchaseDate)
         try container.encode(purchaseFrom, forKey: .purchaseFrom)
         try container.encode(recordDate, forKey: .recordDate)
-        try container.encode(season, forKey: .season)
+        try container.encode(seasons, forKey: .seasons)
     }
     
     convenience init(from decoder: Decoder) throws {
@@ -260,7 +242,7 @@ extension Clothing: Codable {
         let purchaseDate = try container.decode(Date.self, forKey: .purchaseDate)
         let purchaseFrom = try container.decode(String.self, forKey: .purchaseFrom)
         let recordDate = try container.decode(Date.self, forKey: .recordDate)
-        let season = try container.decode([String].self, forKey: .season)
+        let seasons = try container.decode([String].self, forKey: .seasons)
 
         self.init(
             id: id,
@@ -275,7 +257,7 @@ extension Clothing: Codable {
             purchaseDate: purchaseDate,
             purchaseFrom: purchaseFrom,
             recordDate: recordDate,
-            season: season
+            seasons: seasons
         )
     }
 }
