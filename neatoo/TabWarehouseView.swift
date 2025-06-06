@@ -35,7 +35,7 @@ struct WarehouseView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
-                    WarehouseViewDivide(
+                    CardView(
                         title: "食物",
                         items: foods.sorted { $0.recordDate > $1.recordDate },
                         showAddSheet: $showAddFoodSheet,
@@ -62,7 +62,7 @@ struct WarehouseView: View {
                     )
                 }
                 VStack(spacing: 16) {
-                    WarehouseViewDivide(
+                    CardView(
                         title: "衣物",
                         items: clothing.sorted { $0.recordDate > $1.recordDate },
                         showAddSheet: $showAddClothingSheet,
@@ -89,7 +89,7 @@ struct WarehouseView: View {
                     )
                 }
                 VStack(spacing: 16) {
-                    WarehouseViewDivide(
+                    CardView(
                         title: "杂物",
                         items: wares.sorted { $0.recordDate > $1.recordDate },
                         showAddSheet: $showAddWareSheet,
@@ -193,7 +193,7 @@ struct WarehouseView: View {
     }
 }
 
-#Preview {
-    WarehouseView()
-        .modelContainer(for: [Ware.self, Clothing.self, Food.self])
-}
+//#Preview {
+//    WarehouseView()
+//        .modelContainer(for: [Ware.self, Clothing.self, Food.self])
+//}

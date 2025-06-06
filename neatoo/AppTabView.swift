@@ -19,6 +19,7 @@ struct AppTabView: View {
             }
             NavigationStack {
                 TimeView()
+                    .modelContainer(for: Task.self)
             }
             .tabItem {
                 Image(systemName: "clock.fill")
@@ -37,5 +38,5 @@ struct AppTabView: View {
 
 #Preview {
     AppTabView()
-        .modelContainer(for: [Ware.self, Clothing.self, Food.self])
+        .modelContainer(for: [Ware.self, Clothing.self, Food.self, Task.self])
 }

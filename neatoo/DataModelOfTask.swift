@@ -44,7 +44,6 @@ final class Task: Identifiable {
     }
 }
 
-
 extension Task: Codable {
     enum CodingKeys: String, CodingKey {
         case id, category, endDate, name, priority, startDate

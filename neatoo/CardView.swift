@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct WarehouseViewDivide<Item, RowView: View, AddView: View, AllItemsView: View>: View {
+struct CardView<Item, RowView: View, AddView: View, AllItemsView: View>: View {
     
     var title: String
     var items: [Item]
@@ -74,7 +74,7 @@ struct WarehouseViewDivide<Item, RowView: View, AddView: View, AllItemsView: Vie
 }
 
 #Preview {
-    WarehouseViewDivide<Ware, Text, Text, Text>(
+    CardView<Ware, Text, Text, Text>(
         title: "电器",
         items: [
             Ware(id: UUID(), brand: "", category: "厨具", name: "Spoon", number: 2, price: 3, priority: 3, purchaseDate: .now, purchaseFrom: "", recordDate: .now, wareDescription: ""),
