@@ -1,10 +1,3 @@
-//
-//  AddNewTaskView.swift
-//  neatoo
-//
-//  Created by song on 2025/6/5.
-//
-
 import SwiftUI
 import SwiftData
 

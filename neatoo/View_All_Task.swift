@@ -1,22 +1,12 @@
-//
-//  AllWarehouseInfoView.swift
-//  neatoo
-//
-//  Created by song on 2025/6/2.
-//
-
 import SwiftUI
 import SwiftData
 
-struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView: View>: View {
+struct AllTaskListView<DetailView: View>: View {
     //MARK: - parameters
-    let title: String
-    let items: [Item]
-    let itemName: (Item) -> String
-    let toDetail: (Item) -> DetailView
+    let tasks: [Task]
+    let toDetail: (Task) -> DetailView
     let delete: (IndexSet) -> Void
     let filename: String
-    let itemCountDescription: (Int, Int) -> String
     
     @State private var editMode: EditMode = .inactive
     @State private var exportData: Data?
@@ -24,37 +14,44 @@ struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView:
     @State private var selectedCategory: String = "全部"
 
     var categories: [String] {
-        let all = items.map(\.category)
+        let all = tasks.map(\.category.rawValue)
         return ["全部"] + Array(Set(all)).sorted()
     }
     
-    var filteredItems: [Item] {
+    var filteredTasks: [Task] {
         if selectedCategory == "全部" {
-            return items
+            return tasks
         } else {
-            return items.filter { $0.category == selectedCategory }
+            return tasks.filter { $0.category.rawValue == selectedCategory }
         }
     }
     
+    var totalHoursAndMinutes: (Int, Int) {
+        var hours = 0
+        var minutes = 0
+        
+        for task in filteredTasks {
+            hours += task.duration.hour ?? 0
+            minutes += task.duration.minute ?? 0
+        }
+        
+        hours += minutes / 60
+        minutes = minutes % 60
+        
+        return (hours, minutes)
+    }
+    
     // MARK: - functions
-    private func exportItems() {
+    private func exportTasks() {
         do {
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
             encoder.dateEncodingStrategy = .iso8601
-            exportData = try encoder.encode(items)
+            exportData = try encoder.encode(tasks)
             isExporting = true
         } catch {
             print("Export failed: \(error)")
         }
-    }
-    
-    private func itemName(from item: Item) -> String {
-        (item as? Ware)?.name ?? "Item"
-    }
-    
-    private func itemCount(from item: Item) -> Int {
-        (item as? Ware).map { Int($0.number) } ?? 1
     }
     
     // MARK: - view
@@ -75,9 +72,9 @@ struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView:
                     .listRowInsets(EdgeInsets())
                 }
                 Section {
-                    ForEach(filteredItems) { item in
-                        NavigationLink("\(itemName(item))") {
-                            toDetail(item)
+                    ForEach(filteredTasks) { task in
+                        NavigationLink("\(task.name)") {
+                            toDetail(task)
                         }
                     }
                     .onDelete(perform: delete)
@@ -85,13 +82,13 @@ struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView:
                 }
                 .listRowInsets(EdgeInsets())
                 Section {
-                    Text("共 " + "\(filteredItems.count)" + " 类，" + "\(filteredItems.reduce(0) { $0 + (itemCount(from: $1)) })" + " 个")
+                    Text("共 \(totalHoursAndMinutes.0) 小时 \(totalHoursAndMinutes.1) 分钟")
                         .listRowInsets(EdgeInsets())
                         .padding(.horizontal)
                 }
             }
             .listSectionSpacing(12)
-            .navigationTitle(title)
+            .navigationTitle("所有事项")
             .navigationBarTitleDisplayMode(.inline)
             .environment(\.editMode, $editMode)
             .toolbar {
@@ -106,7 +103,7 @@ struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView:
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        exportItems()
+                        exportTasks()
                     } label: {
                         Image(systemName: "square.and.arrow.down")
                     }

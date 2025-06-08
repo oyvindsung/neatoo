@@ -1,10 +1,3 @@
-//
-//  WarehouseViewDivide.swift
-//  neatoo
-//
-//  Created by song on 2025/6/2.
-//
-
 import SwiftUI
 
 struct CardView<Item, RowView: View, AddView: View, AllItemsView: View>: View {

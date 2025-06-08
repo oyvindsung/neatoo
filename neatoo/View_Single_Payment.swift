@@ -1,15 +1,8 @@
-//
-//  SingleTaskDetialInfo.swift
-//  neatoo
-//
-//  Created by song on 2025/6/6.
-//
-
 import SwiftUI
 import SwiftData
 
-struct TaskDetailInfo: View {
-    let task: Task
+struct PaymentDetailView: View {
+    let payment: Payment
     
     private var dateFormatter: DateFormatter {
         let dateFormatter = DateFormatter()
@@ -30,32 +23,45 @@ struct TaskDetailInfo: View {
                 HStack {
                     Text("ID")
                     Spacer()
-                    Text("\(task.id)")
+                    Text("\(payment.id)")
                 }
                 HStack {
                     Text("名称")
                     Spacer()
-                    Text("\(task.name)")
+                    Text("\(payment.name)")
+                }
+                HStack {
+                    Text("金额")
+                    Spacer()
+                    Text("\(payment.amount)")
                 }
                 HStack {
                     Text("类别")
                     Spacer()
-                    Text("\(task.category.rawValue)")
+                    Text("\(payment.category.rawValue)")
                 }
                 HStack {
-                    Text("开始时间")
+                    Text("支付方式")
                     Spacer()
-                    Text(dateFormatter.string(from: task.startDate))
+                    Text("\(payment.how)")
                 }
                 HStack {
-                    Text("结束时间")
+                    Text("支付账户")
                     Spacer()
-                    Text(dateFormatter.string(from: task.endDate))
+                    Text("\(payment.account.name)")
                 }
                 HStack {
-                    Text("持续时间")
+                    Text("支付时间")
                     Spacer()
-                    Text("\(task.duration.hour ?? 0) 小时 \(task.duration.minute ?? 0) 分钟")
+                    Text(dateFormatter.string(from: payment.date))
+                }
+                HStack {
+                    Text("重要性")
+                    Spacer()
+                    ForEach(1...5, id: \.self) { index in
+                        Image(systemName: index <= payment.priority ? "star.fill" : "star")
+                            .foregroundColor(.accent)
+                    }
                 }
             }
         }

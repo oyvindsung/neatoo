@@ -1,19 +1,12 @@
-//
-//  TimeView.swift
-//  neatoo
-//
-//  Created by song on 2025/6/1.
-//
-
 import SwiftUI
 import SwiftData
 
-struct TimeView: View {
-    @Query private var tasks: [Task]
+struct FinanceView: View {
+    @Query private var payments: [Payment]
     
     @Environment(\.modelContext) private var context
     
-    @State private var showAddTaskSheet = false
+    @State private var showAddPaymentSheet = false
     @State private var isImporting = false
     
     var body: some View {
@@ -21,31 +14,27 @@ struct TimeView: View {
             ScrollView {
                 TimeChartView()
                 CardView(
-                    title: "事项",
-                    items: tasks.sorted { $0.endDate > $1.endDate },
-                    showAddSheet: $showAddTaskSheet,
+                    title: "支出",
+                    items: payments.sorted { $0.date > $1.date },
+                    showAddSheet: $showAddPaymentSheet,
                     itemName: { $0.name },
-                    rowDestination: { task in TaskDetailInfo(task: task) },
-                    allItemsView: { AllTaskListView(
-                        toDetail: { task in TaskDetailInfo(task: task) },
+                    rowDestination: { payment in PaymentDetailView(payment: payment) },
+                    allItemsView: { AllPaymentListView(
+                        payments: payments,
+                        toDetail: { payment in PaymentDetailView(payment: payment) },
                         delete: { indexSet in
                             for index in indexSet {
-                                context.delete(tasks[index])
+                                context.delete(payments[index])
                             }
                         },
-                        filename: "task_data"
+                        filename: "payment_data"
                     )
-                    .modelContainer(for: Task.self)
+                    .modelContainer(for: Payment.self)
                     },
                     addItemView: {
-                        AddNewTaskView { newTask in context.insert(newTask) }
+                        AddNewTaskView { newPayment in context.insert(newPayment) }
                     }
                 )
-            }
-            .sheet(isPresented: $showAddTaskSheet) {
-                AddNewTaskView { newTask in
-                    context.insert(newTask)
-                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -82,12 +71,12 @@ struct TimeView: View {
                     print("Import failed: \(error)")
                 }
             }
-            .navigationTitle("日程")
+            .navigationTitle("记账")
         }
     }
 }
 
 #Preview {
-    TimeView()
-        .modelContainer(for: [Task.self])
+    FinanceView()
+        .modelContainer(for: [Payment.self])
 }

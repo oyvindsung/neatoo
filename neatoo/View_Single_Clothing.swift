@@ -48,12 +48,20 @@ struct ClothingDetailInfo: View {
                 HStack {
                     Text("价格")
                     Spacer()
-                    Text("¥".appending(numberFormatter.string(from: clothing.price as NSNumber) ?? "0"))
+                    Text("¥ ".appending(numberFormatter.string(from: clothing.price as NSNumber) ?? "0"))
                 }
                 HStack {
                     Text("类别")
                     Spacer()
                     Text("\(clothing.category)")
+                }
+                HStack {
+                    Text("重要性")
+                    Spacer()
+                    ForEach(1...5, id: \.self) { index in
+                        Image(systemName: index <= clothing.priority ? "star.fill" : "star")
+                            .foregroundColor(.accent)
+                    }
                 }
                 HStack {
                     Text("季节")

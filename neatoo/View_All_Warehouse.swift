@@ -1,22 +1,15 @@
-//
-//  AllWarehouseInfoView.swift
-//  neatoo
-//
-//  Created by song on 2025/6/2.
-//
-
 import SwiftUI
 import SwiftData
 
-struct AllTaskListView<DetailView: View>: View {
+struct AllItemListView<Item: Identifiable & Codable & Categorizable, DetailView: View>: View {
     //MARK: - parameters
-    @Query private var tasks: [Task]
-    
-    @Environment(\.modelContext) private var context
-    
-    let toDetail: (Task) -> DetailView
+    let title: String
+    let items: [Item]
+    let itemName: (Item) -> String
+    let toDetail: (Item) -> DetailView
     let delete: (IndexSet) -> Void
     let filename: String
+    let itemCountDescription: (Int, Int) -> String
     
     @State private var editMode: EditMode = .inactive
     @State private var exportData: Data?
@@ -24,44 +17,37 @@ struct AllTaskListView<DetailView: View>: View {
     @State private var selectedCategory: String = "全部"
 
     var categories: [String] {
-        let all = tasks.map(\.category.rawValue)
+        let all = items.map(\.category)
         return ["全部"] + Array(Set(all)).sorted()
     }
     
-    var filteredTasks: [Task] {
+    var filteredItems: [Item] {
         if selectedCategory == "全部" {
-            return tasks
+            return items
         } else {
-            return tasks.filter { $0.category.rawValue == selectedCategory }
+            return items.filter { $0.category == selectedCategory }
         }
-    }
-    
-    var totalHoursAndMinutes: (Int, Int) {
-        var hours = 0
-        var minutes = 0
-        
-        for task in filteredTasks {
-            hours += task.duration.hour ?? 0
-            minutes += task.duration.minute ?? 0
-        }
-        
-        hours += minutes / 60
-        minutes = minutes % 60
-        
-        return (hours, minutes)
     }
     
     // MARK: - functions
-    private func exportTasks() {
+    private func exportItems() {
         do {
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
             encoder.dateEncodingStrategy = .iso8601
-            exportData = try encoder.encode(tasks)
+            exportData = try encoder.encode(items)
             isExporting = true
         } catch {
             print("Export failed: \(error)")
         }
+    }
+    
+    private func itemName(from item: Item) -> String {
+        (item as? Ware)?.name ?? "Item"
+    }
+    
+    private func itemCount(from item: Item) -> Int {
+        (item as? Ware).map { Int($0.number) } ?? 1
     }
     
     // MARK: - view
@@ -82,9 +68,9 @@ struct AllTaskListView<DetailView: View>: View {
                     .listRowInsets(EdgeInsets())
                 }
                 Section {
-                    ForEach(filteredTasks) { task in
-                        NavigationLink("\(task.name)") {
-                            toDetail(task)
+                    ForEach(filteredItems) { item in
+                        NavigationLink("\(itemName(item))") {
+                            toDetail(item)
                         }
                     }
                     .onDelete(perform: delete)
@@ -92,13 +78,13 @@ struct AllTaskListView<DetailView: View>: View {
                 }
                 .listRowInsets(EdgeInsets())
                 Section {
-                    Text("共 \(totalHoursAndMinutes.0) 小时 \(totalHoursAndMinutes.1) 分钟")
+                    Text("共 " + "\(filteredItems.count)" + " 类，" + "\(filteredItems.reduce(0) { $0 + (itemCount(from: $1)) })" + " 个")
                         .listRowInsets(EdgeInsets())
                         .padding(.horizontal)
                 }
             }
             .listSectionSpacing(12)
-            .navigationTitle("所有事项")
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .environment(\.editMode, $editMode)
             .toolbar {
@@ -113,7 +99,7 @@ struct AllTaskListView<DetailView: View>: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        exportTasks()
+                        exportItems()
                     } label: {
                         Image(systemName: "square.and.arrow.down")
                     }
