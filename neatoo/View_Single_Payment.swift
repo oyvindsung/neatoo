@@ -31,16 +31,6 @@ struct PaymentDetailView: View {
                     Text("\(payment.name)")
                 }
                 HStack {
-                    Text("金额")
-                    Spacer()
-                    Text("\(payment.amount)")
-                }
-                HStack {
-                    Text("类别")
-                    Spacer()
-                    Text("\(payment.category.rawValue)")
-                }
-                HStack {
                     Text("支付方式")
                     Spacer()
                     Text("\(payment.how)")
@@ -51,9 +41,14 @@ struct PaymentDetailView: View {
                     Text("\(payment.account.name)")
                 }
                 HStack {
-                    Text("支付时间")
+                    Text("支付金额")
                     Spacer()
-                    Text(dateFormatter.string(from: payment.date))
+                    Text("\(payment.amount)")
+                }
+                HStack {
+                    Text("类别")
+                    Spacer()
+                    Text("\(payment.category.rawValue)")
                 }
                 HStack {
                     Text("重要性")
@@ -62,6 +57,11 @@ struct PaymentDetailView: View {
                         Image(systemName: index <= payment.priority ? "star.fill" : "star")
                             .foregroundColor(.accent)
                     }
+                }
+                HStack {
+                    Text("支付时间")
+                    Spacer()
+                    Text(dateFormatter.string(from: payment.date))
                 }
             }
         }

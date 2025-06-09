@@ -27,7 +27,7 @@ struct AllPaymentListView<DetailView: View>: View {
     }
     
     var totalPaymentAmount: Double {
-        var amount = 0
+        var amount: Double = 0.0
         
         for payment in filteredPayments {
             amount += payment.amount
@@ -77,7 +77,7 @@ struct AllPaymentListView<DetailView: View>: View {
                 }
                 .listRowInsets(EdgeInsets())
                 Section {
-                    Text("共支出 ¥ \(totalPaymentAmount.0)")
+                    Text("共支出 ¥ \(totalPaymentAmount, specifier: "%.2f")")
                         .listRowInsets(EdgeInsets())
                         .padding(.horizontal)
                 }
@@ -118,7 +118,7 @@ struct AllPaymentListView<DetailView: View>: View {
     }
 }
 
-
-#Preview {
-    AllPaymentListView()
-}
+//
+//#Preview {
+//    AllPaymentListView()
+//}

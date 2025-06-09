@@ -32,7 +32,7 @@ struct FinanceView: View {
                     .modelContainer(for: Payment.self)
                     },
                     addItemView: {
-                        AddNewTaskView { newPayment in context.insert(newPayment) }
+                        AddNewPaymentView { newPayment in context.insert(newPayment) }
                     }
                 )
             }
@@ -61,7 +61,7 @@ struct FinanceView: View {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .iso8601
 
-                    let decodedItems = try decoder.decode([Task].self, from: data)
+                    let decodedItems = try decoder.decode([Payment].self, from: data)
                     for item in decodedItems {
                         withAnimation {
                             context.insert(item)
