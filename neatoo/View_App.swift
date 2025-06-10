@@ -24,6 +24,13 @@ struct AppTabView: View {
             .tabItem {
                 Image(systemName: "door.garage.closed")
             }
+            NavigationStack {
+                MixView()
+                
+            }
+            .tabItem {
+                Image(systemName: "teddybear.fill")
+            }
         }
 
     }
