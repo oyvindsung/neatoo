@@ -42,15 +42,6 @@ struct AddNewTaskView: View {
                             }
                     }
                 }
-                // startDate
-//                HStack {
-//                    Text("开始时间")
-//                    Spacer()
-//                    Text("\(lastTask.endDate)")
-//                    DatePicker(selection: lastTask.endDate) {
-//                        Text("")
-//                    }
-//                }
                 // endDate
                 HStack {
                     Text("结束时间")

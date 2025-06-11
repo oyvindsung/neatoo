@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MixView: View {
+struct SettingView: View {
     var body: some View {
         NavigationStack {
             Form {
@@ -16,6 +16,6 @@ struct MixView: View {
 }
 
 #Preview {
-    MixView()
+    SettingView()
         .modelContainer(for: [Account.self])
 }

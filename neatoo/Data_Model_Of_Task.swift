@@ -22,7 +22,7 @@ enum TaskCategory: String, Codable, Identifiable, CaseIterable {
 
 @Model
 final class Task: Identifiable {
-    var id: UUID = UUID()
+    var id: UUID
     
     var category: TaskCategory
     var endDate: Date

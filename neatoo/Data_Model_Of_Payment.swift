@@ -24,7 +24,7 @@ enum IncomeCategory: String, Codable, Identifiable, CaseIterable {
 
 @Model
 final class Account: Identifiable {
-    var id: UUID = UUID()
+    var id: UUID
     var serial: String
     var bank: String
     var balance: Double
@@ -43,11 +43,12 @@ final class Account: Identifiable {
 
 extension Account: Codable {
     enum CodingKeys: String, CodingKey {
-        case serial, bank, balance, name, type
+        case id, serial, bank, balance, name, type
     }
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
         try container.encode(serial, forKey: .serial)
         try container.encode(bank, forKey: .bank)
         try container.encode(balance, forKey: .balance)
@@ -57,6 +58,7 @@ extension Account: Codable {
     
     convenience init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        let id = try container.decode(UUID.self, forKey: .id)
         let serial = try container.decode(String.self, forKey: .serial)
         let bank = try container.decode(String.self, forKey: .bank)
         let balance = try container.decode(Double.self, forKey: .balance)
@@ -64,6 +66,7 @@ extension Account: Codable {
         let type = try container.decode(String.self, forKey: .type)
         
         self.init(
+            id: id,
             serial: serial,
             bank: bank,
             balance: balance,
@@ -75,7 +78,7 @@ extension Account: Codable {
 
 @Model
 final class Payment: Identifiable {
-    var id: UUID = UUID()
+    var id: UUID
     
     var account: String
     var amount: Double
@@ -140,7 +143,7 @@ extension Payment: Codable {
 
 @Model
 final class Income: Identifiable {
-    var id: UUID = UUID()
+    var id: UUID
     
     var account: String
     var amount: Double

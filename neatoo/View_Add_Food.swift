@@ -69,11 +69,12 @@ struct AddNewFoodView: View {
                     Picker(selection: $category) {
                         Text("面制品").tag("面制品")
                         Text("肉制品").tag("肉制品")
-                        Text("蔬菜").tag("蔬菜")
+                        Text("果蔬").tag("果蔬")
                         Text("熟食").tag("熟食")
                         Text("预制品").tag("预制品")
                         Text("调味/酱").tag("调味/酱")
                         Text("乳制品").tag("乳制品")
+                        Text("休闲食品").tag("休闲食品")
                         Text("不可分类").tag("不可分类")
                     } label: {
                         Text("类别")

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		DED840F62DE9D9E100D0135D /* neatoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = neatoo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DED840F62DE9D9E100D0135D /* neatoo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = neatoo.app; path = "/Users/enaelsong/Developer/code/swift/neatoo/build/Debug-iphoneos/neatoo.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				DED840F82DE9D9E100D0135D /* neatoo */,
-				DED840F72DE9D9E100D0135D /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		DED840F72DE9D9E100D0135D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				DED840F62DE9D9E100D0135D /* neatoo.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -97,7 +88,7 @@
 			packageReferences = (
 			);
 			preferredProjectObjectVersion = 77;
-			productRefGroup = DED840F72DE9D9E100D0135D /* Products */;
+			productRefGroup = DED840ED2DE9D9E100D0135D;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
