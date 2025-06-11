@@ -23,17 +23,23 @@ struct AppTabView: View {
                 Image(systemName: "door.garage.closed")
             }
             NavigationStack {
+                CountingView()
+            }
+            .tabItem {
+                Image(systemName: "calendar.badge.exclamationmark")
+            }
+            NavigationStack {
                 SettingView()
             }
             .tabItem {
                 Image(systemName: "teddybear.fill")
             }
         }
-        .modelContainer(for: [Ware.self, Clothing.self, Food.self, Task.self, Payment.self, Account.self, Income.self])
+        .modelContainer(for: [Ware.self, Clothing.self, Food.self, Task.self, Payment.self, Account.self, Income.self, Counting.self])
     }
 }
 
 #Preview {
     AppTabView()
-        .modelContainer(for: [Ware.self, Clothing.self, Food.self, Payment.self, Task.self, Account.self, Income.self])
+        .modelContainer(for: [Ware.self, Clothing.self, Food.self, Payment.self, Task.self, Account.self, Income.self, Counting.self])
 }

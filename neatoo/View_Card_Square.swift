@@ -5,25 +5,51 @@ struct SquareCardView1: View {
     let title: String
     let date: Date
     let width = UIScreen.main.bounds.width / 2 - 24
+    let onDelete: () -> Void
     
-    var timeLeft: DateComponents {
+    var calc: (Int, Int) {
         let calendar = Calendar.current
-        return calendar.dateComponents([.day], from: .now, to: date)
+        let timeLeft = calendar.dateComponents([.hour], from: .now, to: date)
+        let hour = (timeLeft.hour!) % 24
+        let day = Int((timeLeft.hour! - hour) / 24)
+        return (day, hour)
     }
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack {
             HStack {
                 Text(title)
                     .font(.headline)
                 Spacer()
             }
             Spacer()
-            Text("\(timeLeft.day ?? 0)")
-                .fontWeight(.heavy)
-                .fontWidth(.compressed)
-                .font(.system(size: 66))
-                .foregroundColor(.orange)
+            if calc.0 == 0 {
+                HStack(alignment: .bottom, spacing: 2) {
+                    Text("\(calc.1)")
+                        .fontWeight(.heavy)
+                        .fontWidth(.compressed)
+                        .font(.system(size: 66))
+                        .foregroundColor(.orange)
+                    Text("h")
+                        .font(.system(size: 24))
+                        .baselineOffset(10)
+                        .fontWidth(.compressed)
+                        .bold()
+                }
+            } else {
+                HStack(alignment: .bottom, spacing: 2) {
+                    Text("\(calc.0)")
+                        .fontWeight(.heavy)
+                        .fontWidth(.compressed)
+                        .font(.system(size: 66))
+                        .foregroundColor(.orange)
+                    Text("d")
+                        .font(.system(size: 24))
+                        .baselineOffset(10)
+                        .fontWidth(.compressed)
+                        .bold()
+                }
+            }
             Spacer()
         }
         .padding()
@@ -36,6 +62,13 @@ struct SquareCardView1: View {
                         .stroke(Color.white.opacity(0.1), lineWidth: 1)
                 )
         )
+        .contextMenu {
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("删除", systemImage: "trash")
+            }
+        }
     }
 }
 
@@ -43,25 +76,53 @@ struct SquareCardView2: View {
     
     let title: String
     let date: Date
+    let onDelete: () -> Void
+    
     let width = UIScreen.main.bounds.width / 2 - 24
     
-    var timeLeft: DateComponents {
+    var calc: (Int, Int) {
         let calendar = Calendar.current
-        return calendar.dateComponents([.day], from: date, to: .now)
+        let timeLeft = calendar.dateComponents([.hour], from: date, to: .now)
+        let hour = (timeLeft.hour!) % 24
+        let day = Int((timeLeft.hour! - hour) / 24)
+        return (day, hour)
     }
     
     var body: some View {
-        VStack(spacing: 8) {
+        VStack {
             HStack {
                 Text(title)
                     .font(.headline)
                 Spacer()
             }
             Spacer()
-            Text("\(timeLeft.day ?? 0)")
-                .fontWeight(.heavy)
-                .fontWidth(.compressed)
-                .font(.system(size: 66))
+            if calc.0 == 0 {
+                HStack(alignment: .bottom, spacing: 2) {
+                    Text("\(calc.1)")
+                        .fontWeight(.heavy)
+                        .fontWidth(.compressed)
+                        .font(.system(size: 66))
+                        .foregroundColor(.green)
+                    Text("h")
+                        .font(.system(size: 24))
+                        .baselineOffset(10)
+                        .fontWidth(.compressed)
+                        .bold()
+                }
+            } else {
+                HStack(alignment: .bottom, spacing: 2) {
+                    Text("\(calc.0)")
+                        .fontWeight(.heavy)
+                        .fontWidth(.compressed)
+                        .font(.system(size: 66))
+                        .foregroundColor(.green)
+                    Text("d")
+                        .font(.system(size: 24))
+                        .baselineOffset(10)
+                        .fontWidth(.compressed)
+                        .bold()
+                }
+            }
             Spacer()
         }
         .padding()
@@ -74,9 +135,16 @@ struct SquareCardView2: View {
                         .stroke(Color.white.opacity(0.1), lineWidth: 1)
                 )
         )
+        .contextMenu {
+            Button(role: .destructive) {
+                onDelete()
+            } label: {
+                Label("删除", systemImage: "trash")
+            }
+        }
     }
 }
 
-#Preview {
-    SquareCardView1(title: "TTT", date: .now)
-}
+//#Preview {
+//    SquareCardView1(title: "TTT", date: .now, onDelete: () -> Void)
+//}
