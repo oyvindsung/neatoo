@@ -13,11 +13,16 @@ struct AddNewPaymentView: View {
     @State private var name: String = ""
     @State private var priority: Int = 0
     
-    var account: Account? {
-        accounts.first(where: { $0.id == accountID })
+    var account: String {
+        let acc = accounts.first(where: { $0.id == accountID })
+        return (acc?.bank ?? "") + (acc?.serial ?? "")
     }
     
     var onAdd: (Payment) -> Void
+    
+    private func SpendAccountMoney() {
+        accounts.first(where: { $0.id == accountID })?.balance -= amount
+    }
     
     var body: some View {
         NavigationStack {
@@ -39,7 +44,7 @@ struct AddNewPaymentView: View {
                 // account
                 Picker(selection: $accountID) {
                     ForEach(accounts) { acc in
-                        Text(acc.name).tag(acc.id)
+                        Text("\(acc.bank) \(acc.serial)").tag(acc.id)
                     }
                 } label: {
                     Text("支付账户")
@@ -53,7 +58,7 @@ struct AddNewPaymentView: View {
                         .keyboardType(.decimalPad)
                 }
                 // category
-                Picker("所属类别", selection: $category) {
+                Picker("类别", selection: $category) {
                     ForEach(PaymentCategory.allCases) { payment in
                         Text(payment.rawValue).tag(payment)
                     }
@@ -82,9 +87,9 @@ struct AddNewPaymentView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("完成") {
-                        let payment = Payment(account: account ?? Account(serial: "XXXX", bank: "XX", balance: 0, name: "XXXX", type: "XXX"), amount: amount, category: category, date: date, how: how, name: name, priority: priority)
+                        let payment = Payment(account: account, amount: amount, category: category, date: date, how: how, name: name, priority: priority)
                         onAdd(payment)
-                        
+                        SpendAccountMoney()
                         dismiss()
                     }
                     .disabled(name.isEmpty)

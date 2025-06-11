@@ -38,12 +38,12 @@ struct PaymentDetailView: View {
                 HStack {
                     Text("支付账户")
                     Spacer()
-                    Text("\(payment.account.name)")
+                    Text("\(payment.account)")
                 }
                 HStack {
                     Text("支付金额")
                     Spacer()
-                    Text("\(payment.amount)")
+                    Text("¥ \(numberFormatter.string(from: payment.amount as NSNumber) ?? "0")")
                 }
                 HStack {
                     Text("类别")
@@ -59,7 +59,7 @@ struct PaymentDetailView: View {
                     }
                 }
                 HStack {
-                    Text("支付时间")
+                    Text("支付日期")
                     Spacer()
                     Text(dateFormatter.string(from: payment.date))
                 }

@@ -48,7 +48,7 @@ struct FoodDetailInfo: View {
                 HStack {
                     Text("价格")
                     Spacer()
-                    Text("¥".appending(numberFormatter.string(from: food.price as NSNumber) ?? "0"))
+                    Text("¥ \(numberFormatter.string(from: food.price as NSNumber) ?? "0")")
                 }
                 HStack {
                     Text("类别")

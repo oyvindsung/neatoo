@@ -32,15 +32,14 @@ struct TimeView: View {
                     .modelContainer(for: Task.self)
                     },
                     addItemView: {
-                        AddNewTaskView { newTask in context.insert(newTask) }
+                        AddNewTaskView(
+                            lastTaskEndDate: tasks.sorted(by: { $0.endDate > $1.endDate }).first?.endDate ?? .now
+                        ) { newTask in
+                            context.insert(newTask)
+                        }
                     }
                 )
             }
-//            .sheet(isPresented: $showAddTaskSheet) {
-//                AddNewTaskView { newTask in
-//                    context.insert(newTask)
-//                }
-//            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {

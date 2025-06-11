@@ -1,13 +1,24 @@
 import SwiftUI
 import SwiftData
 
+enum ImportFinanceType: String, CaseIterable, Identifiable {
+    case income = "Income"
+    case payment = "Payment"
+
+    var id: String { self.rawValue }
+}
+
 struct FinanceView: View {
     @Query private var payments: [Payment]
+    @Query private var incomes: [Income]
     
     @Environment(\.modelContext) private var context
     
     @State private var showAddPaymentSheet = false
+    @State private var showAddIncomeSheet = false
     @State private var isImporting = false
+    @State private var selectedImportType: ImportFinanceType? = nil
+    @State private var showImportTypePicker = false
     
     var body: some View {
         NavigationStack {
@@ -29,22 +40,50 @@ struct FinanceView: View {
                         },
                         filename: "payment_data"
                     )
-//                    .modelContainer(for: Payment.self)
                     },
                     addItemView: {
                         AddNewPaymentView { newPayment in context.insert(newPayment) }
-//                            .modelContainer(for: [Account.self])
+                    }
+                )
+                CardView(
+                    title: "收入",
+                    items: incomes.sorted { $0.date > $1.date },
+                    showAddSheet: $showAddIncomeSheet,
+                    itemName: { $0.name },
+                    rowDestination: { income in IncomeDetailView(income: income) },
+                    allItemsView: { AllIncomeListView(
+                        incomes: incomes,
+                        toDetail: { income in IncomeDetailView(income: income) },
+                        delete: { indexSet in
+                            for index in indexSet {
+                                context.delete(incomes[index])
+                            }
+                        },
+                        filename: "income_data"
+                    )
+                    },
+                    addItemView: {
+                        AddNewIncome { newIncome in context.insert(newIncome) }
                     }
                 )
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        isImporting = true
+                        showImportTypePicker = true
                     } label: {
                         Image(systemName: "square.and.arrow.up")
                     }
                 }
+            }
+            .confirmationDialog("选择导入的数据类型", isPresented: $showImportTypePicker, titleVisibility: .visible) {
+                ForEach(ImportFinanceType.allCases) { type in
+                    Button(type.rawValue) {
+                        selectedImportType = type
+                        isImporting = true
+                    }
+                }
+                Button("取消", role: .cancel) { }
             }
             .fileImporter(
                 isPresented: $isImporting,
@@ -62,12 +101,22 @@ struct FinanceView: View {
                     let decoder = JSONDecoder()
                     decoder.dateDecodingStrategy = .iso8601
 
-                    let decodedItems = try decoder.decode([Payment].self, from: data)
-                    for item in decodedItems {
-                        withAnimation {
-                            context.insert(item)
+                    if selectedImportType == .income {
+                        let decodedItems = try decoder.decode([Income].self, from: data)
+                        for item in decodedItems {
+                            withAnimation {
+                                context.insert(item)
+                            }
+                        }
+                    } else {
+                        let decodedItems = try decoder.decode([Payment].self, from: data)
+                        for item in decodedItems {
+                            withAnimation {
+                                context.insert(item)
+                            }
                         }
                     }
+                    
                 } catch {
                     print("Import failed: \(error)")
                 }

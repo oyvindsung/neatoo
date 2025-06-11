@@ -4,17 +4,19 @@ import SwiftData
 struct AddNewTaskView: View {
     @Environment(\.dismiss) private var dismiss
     
+    let lastTaskEndDate: Date
+    
     @State private var category: TaskCategory = .learn
     @State private var endDate: Date = .now
     @State private var name: String = ""
     @State private var priority: Int = 0
-    @State private var startDate: Date = .now
+//    @State private var startDate: Date = .now
     
     var onAdd: (Task) -> Void
     
     var duration: DateComponents {
         let calendar = Calendar.current
-        return calendar.dateComponents([.hour, .minute], from: startDate, to: endDate)
+        return calendar.dateComponents([.hour, .minute], from: lastTaskEndDate, to: endDate)
     }
     
     var body: some View {
@@ -41,13 +43,14 @@ struct AddNewTaskView: View {
                     }
                 }
                 // startDate
-                HStack {
-                    Text("开始时间")
-                    Spacer()
-                    DatePicker(selection: $startDate) {
-                        Text("")
-                    }
-                }
+//                HStack {
+//                    Text("开始时间")
+//                    Spacer()
+//                    Text("\(lastTask.endDate)")
+//                    DatePicker(selection: lastTask.endDate) {
+//                        Text("")
+//                    }
+//                }
                 // endDate
                 HStack {
                     Text("结束时间")
@@ -70,7 +73,7 @@ struct AddNewTaskView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("完成") {
-                        let task = Task(category: category, endDate: endDate, name: name, priority: priority, startDate: startDate)
+                        let task = Task(category: category, endDate: endDate, name: name, priority: priority, startDate: lastTaskEndDate)
                         onAdd(task)
                         
                         dismiss()
@@ -82,9 +85,9 @@ struct AddNewTaskView: View {
     }
 }
 
-#Preview {
-    AddNewTaskView { task in
-        print("新任务：\(task.name)，开始于 \(task.startDate)，结束于 \(task.endDate)")
-    }
-}
+//#Preview {
+//    AddNewTaskView { task in
+//        print("新任务：\(task.name)，开始于 \(task.startDate)，结束于 \(task.endDate)")
+//    }
+//}
 

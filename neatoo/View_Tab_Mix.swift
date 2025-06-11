@@ -6,7 +6,6 @@ struct MixView: View {
             Form {
                 NavigationLink {
                     AllAccountView()
-//                        .modelContainer(for: [Account.self])
                 } label: {
                     Text("银行账户管理")
                 }

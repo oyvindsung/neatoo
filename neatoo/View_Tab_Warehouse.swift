@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-enum ImportType: String, CaseIterable, Identifiable {
+enum ImportWareType: String, CaseIterable, Identifiable {
     case ware = "Ware"
     case food = "Food"
     case clothing = "Clothing"
@@ -28,7 +28,7 @@ struct WarehouseView: View {
     @State private var showAddClothingSheet = false
     @State private var showAddFoodSheet = false
     @State private var showImportTypePicker = false
-    @State private var selectedImportType: ImportType? = nil
+    @State private var selectedImportType: ImportWareType? = nil
     @State private var isImporting = false
     
     var body: some View {
@@ -116,21 +116,6 @@ struct WarehouseView: View {
                     )
                 }
             }
-            .sheet(isPresented: $showAddWareSheet) {
-                AddNewWareView { newWare in
-                    context.insert(newWare)
-                }
-            }
-            .sheet(isPresented: $showAddFoodSheet) {
-                AddNewFoodView { newFood in
-                    context.insert(newFood)
-                }
-            }
-            .sheet(isPresented: $showAddClothingSheet) {
-                AddNewClothingView { newClothing in
-                    context.insert(newClothing)
-                }
-            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -141,7 +126,7 @@ struct WarehouseView: View {
                 }
             }
             .confirmationDialog("选择导入的数据类型", isPresented: $showImportTypePicker, titleVisibility: .visible) {
-                ForEach(ImportType.allCases) { type in
+                ForEach(ImportWareType.allCases) { type in
                     Button(type.rawValue) {
                         selectedImportType = type
                         isImporting = true
