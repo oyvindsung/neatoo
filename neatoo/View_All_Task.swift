@@ -72,7 +72,7 @@ struct AllTaskListView<DetailView: View>: View {
                     .listRowInsets(EdgeInsets())
                 }
                 Section {
-                    ForEach(filteredTasks) { task in
+                    ForEach(filteredTasks.sorted(by: { $0.endDate > $1.endDate })) { task in
                         NavigationLink("\(task.name)") {
                             toDetail(task)
                         }

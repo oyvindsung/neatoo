@@ -12,7 +12,7 @@ struct FinanceView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                TimeChartView()
+                PaymentChartView()
                 CardView(
                     title: "支出",
                     items: payments.sorted { $0.date > $1.date },
@@ -29,10 +29,11 @@ struct FinanceView: View {
                         },
                         filename: "payment_data"
                     )
-                    .modelContainer(for: Payment.self)
+//                    .modelContainer(for: Payment.self)
                     },
                     addItemView: {
                         AddNewPaymentView { newPayment in context.insert(newPayment) }
+//                            .modelContainer(for: [Account.self])
                     }
                 )
             }

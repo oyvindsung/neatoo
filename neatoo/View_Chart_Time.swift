@@ -1,10 +1,3 @@
-//
-//  WarehouseChartView.swift
-//  neatoo
-//
-//  Created by song on 2025/6/4.
-//
-
 import SwiftUI
 import SwiftData
 import Charts

@@ -2,16 +2,10 @@ import SwiftUI
 import SwiftData
 
 struct AddNewPaymentView: View {
+    @Query private var accounts: [Account]
     @Environment(\.dismiss) private var dismiss
     
-//    var account: Account
-//    var amount: Double
-//    var category: PaymentCategory
-//    var how: String
-//    var name: String
-//    var priority: Int
-//    var date: Date
-    
+    @State private var accountID: UUID?
     @State private var amount: Double = 0
     @State private var category: PaymentCategory = .education
     @State private var date: Date = .now
@@ -19,7 +13,9 @@ struct AddNewPaymentView: View {
     @State private var name: String = ""
     @State private var priority: Int = 0
     
-    let account = Account(ID: "", bank: "", balance: 3, name: "")
+    var account: Account? {
+        accounts.first(where: { $0.id == accountID })
+    }
     
     var onAdd: (Payment) -> Void
     
@@ -39,6 +35,14 @@ struct AddNewPaymentView: View {
                     Text("现金").tag("现金")
                 } label: {
                     Text("支付方式")
+                }
+                // account
+                Picker(selection: $accountID) {
+                    ForEach(accounts) { acc in
+                        Text(acc.name).tag(acc.id)
+                    }
+                } label: {
+                    Text("支付账户")
                 }
                 // amount
                 HStack {
@@ -78,7 +82,7 @@ struct AddNewPaymentView: View {
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("完成") {
-                        let payment = Payment(account: account, amount: amount, category: category, date: date, how: how, name: name, priority: priority)
+                        let payment = Payment(account: account ?? Account(serial: "XXXX", bank: "XX", balance: 0, name: "XXXX", type: "XXX"), amount: amount, category: category, date: date, how: how, name: name, priority: priority)
                         onAdd(payment)
                         
                         dismiss()

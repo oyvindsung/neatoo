@@ -67,7 +67,7 @@ struct AllPaymentListView<DetailView: View>: View {
                     .listRowInsets(EdgeInsets())
                 }
                 Section {
-                    ForEach(filteredPayments) { payment in
+                    ForEach(filteredPayments.sorted(by: { $0.date > $1.date })) { payment in
                         NavigationLink("\(payment.name)") {
                             toDetail(payment)
                         }

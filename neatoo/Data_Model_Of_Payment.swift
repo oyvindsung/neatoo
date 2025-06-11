@@ -13,17 +13,55 @@ enum PaymentCategory: String, Codable, Identifiable, CaseIterable {
     var id: String { self.rawValue }
 }
 
-struct Account: Codable {
-    var ID: String
+
+@Model
+final class Account: Identifiable {
+    var id: UUID = UUID()
+    var serial: String
     var bank: String
     var balance: Double
     var name: String
+    var type: String
     
-    init(ID: String, bank: String, balance: Double, name: String) {
-        self.ID = ID
+    init(id: UUID = UUID(), serial: String, bank: String, balance: Double, name: String, type: String) {
+        self.id = id
+        self.serial = serial
         self.bank = bank
         self.balance = balance
         self.name = name
+        self.type = type
+    }
+}
+
+extension Account: Codable {
+    enum CodingKeys: String, CodingKey {
+        case serial, bank, balance, name, type
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(serial, forKey: .serial)
+        try container.encode(bank, forKey: .bank)
+        try container.encode(balance, forKey: .balance)
+        try container.encode(name, forKey: .name)
+        try container.encode(type, forKey: .type)
+    }
+    
+    convenience init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let serial = try container.decode(String.self, forKey: .serial)
+        let bank = try container.decode(String.self, forKey: .bank)
+        let balance = try container.decode(Double.self, forKey: .balance)
+        let name = try container.decode(String.self, forKey: .name)
+        let type = try container.decode(String.self, forKey: .type)
+        
+        self.init(
+            serial: serial,
+            bank: bank,
+            balance: balance,
+            name: name,
+            type: type
+        )
     }
 }
 
