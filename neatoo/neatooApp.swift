@@ -12,6 +12,7 @@ struct neatooApp: App {
     var body: some Scene {
         WindowGroup {
             AppTabView()
+                .modelContainer(for: [Ware.self, Clothing.self, Food.self, Task.self, Payment.self, Account.self, Income.self, Counting.self])
         }
     }
 }

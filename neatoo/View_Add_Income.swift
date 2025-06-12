@@ -4,6 +4,7 @@ import SwiftData
 struct AddNewIncome: View {
     @Query private var accounts: [Account]
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
     
     @State private var accountID: UUID?
     @State private var amount: Double = 0
@@ -64,6 +65,11 @@ struct AddNewIncome: View {
                         let income = Income(account: account, amount: amount, category: category, date: date, name: name)
                         onAdd(income)
                         AddIncomeToAccount()
+                        do {
+                            try context.save()
+                        } catch {
+                            print("Failed to save context: \(error)")
+                        }
                         dismiss()
                     }
                     .disabled(name.isEmpty || amount <= 0)

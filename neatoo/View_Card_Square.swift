@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct SquareCardView1: View {
     
@@ -38,11 +39,24 @@ struct SquareCardView1: View {
                 }
             } else {
                 HStack(alignment: .bottom, spacing: 2) {
+//                    if calc.0 >= 1000 {
+//                        Text("\(calc.0)")
+//                            .font(.system(size: 66))
+//                            .foregroundColor(.orange)
+//                    } else {
+//                        Text("\(calc.0)")
+//                            .fontWeight(.heavy)
+//                            .fontWidth(.compressed)
+//                            .font(.system(size: 66))
+//                            .foregroundColor(.orange)
+//                    }
                     Text("\(calc.0)")
                         .fontWeight(.heavy)
                         .fontWidth(.compressed)
                         .font(.system(size: 66))
                         .foregroundColor(.orange)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                     Text("d")
                         .font(.system(size: 24))
                         .baselineOffset(10)
@@ -73,6 +87,8 @@ struct SquareCardView1: View {
 }
 
 struct SquareCardView2: View {
+    
+    @Environment(\.modelContext) private var context
     
     let title: String
     let date: Date
@@ -111,11 +127,27 @@ struct SquareCardView2: View {
                 }
             } else {
                 HStack(alignment: .bottom, spacing: 2) {
+//                    if calc.0 >= 1000 {
+//                        Text("\(calc.0)")
+//                            .font(.system(size: 66))
+//                            .fontWidth(.compressed)
+//                            .foregroundColor(.green)
+//                    } else {
+//                        Text("\(calc.0)")
+//                            .fontWeight(.heavy)
+//                            .fontWidth(.compressed)
+//                            .font(.system(size: 66))
+//                            .foregroundColor(.green)
+//                            .lineLimit(1)
+//                            .minimumScaleFactor(0.5)
+//                    }
                     Text("\(calc.0)")
                         .fontWeight(.heavy)
                         .fontWidth(.compressed)
                         .font(.system(size: 66))
                         .foregroundColor(.green)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
                     Text("d")
                         .font(.system(size: 24))
                         .baselineOffset(10)
@@ -138,6 +170,11 @@ struct SquareCardView2: View {
         .contextMenu {
             Button(role: .destructive) {
                 onDelete()
+                do {
+                    try context.save()
+                } catch {
+                    print("Failed to save context: \(error)")
+                }
             } label: {
                 Label("删除", systemImage: "trash")
             }

@@ -49,6 +49,11 @@ struct WarehouseView: View {
                             delete: { indexSet in
                                 for index in indexSet {
                                     context.delete(foods[index])
+                                    do {
+                                        try context.save()
+                                    } catch {
+                                        print("Failed to save context: \(error)")
+                                    }
                                 }
                             },
                             filename: "food_data",
@@ -57,7 +62,14 @@ struct WarehouseView: View {
                             }
                         )},
                         addItemView: {
-                            AddNewFoodView { newFood in context.insert(newFood) }
+                            AddNewFoodView { newFood in
+                                context.insert(newFood)
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("Failed to save context: \(error)")
+                                }
+                            }
                         }
                     )
                 }
@@ -76,6 +88,11 @@ struct WarehouseView: View {
                             delete: { indexSet in
                                 for index in indexSet {
                                     context.delete(clothing[index])
+                                    do {
+                                        try context.save()
+                                    } catch {
+                                        print("Failed to save context: \(error)")
+                                    }
                                 }
                             },
                             filename: "clothing_data",
@@ -84,7 +101,14 @@ struct WarehouseView: View {
                             }
                         )},
                         addItemView: {
-                            AddNewClothingView { newClothing in context.insert(newClothing) }
+                            AddNewClothingView { newClothing in
+                                context.insert(newClothing)
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("Failed to save context: \(error)")
+                                }
+                            }
                         }
                     )
                 }
@@ -103,6 +127,11 @@ struct WarehouseView: View {
                             delete: { indexSet in
                                 for index in indexSet {
                                     context.delete(wares[index])
+                                    do {
+                                        try context.save()
+                                    } catch {
+                                        print("Failed to save context: \(error)")
+                                    }
                                 }
                             },
                             filename: "ware_data",
@@ -111,7 +140,14 @@ struct WarehouseView: View {
                             }
                         )},
                         addItemView: {
-                            AddNewWareView { newWare in context.insert(newWare) }
+                            AddNewWareView { newWare in
+                                context.insert(newWare)
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("Failed to save context: \(error)")
+                                }
+                            }
                         }
                     )
                 }
@@ -155,16 +191,31 @@ struct WarehouseView: View {
                         let decodedItems = try decoder.decode([Ware].self, from: data)
                         for item in decodedItems {
                             context.insert(item)
+                            do {
+                                try context.save()
+                            } catch {
+                                print("Failed to save context: \(error)")
+                            }
                         }
                     case .food:
                         let decodedItems = try decoder.decode([Food].self, from: data)
                         for item in decodedItems {
                             context.insert(item)
+                            do {
+                                try context.save()
+                            } catch {
+                                print("Failed to save context: \(error)")
+                            }
                         }
                     case .clothing:
                         let decodedItems = try decoder.decode([Clothing].self, from: data)
                         for item in decodedItems {
                             context.insert(item)
+                            do {
+                                try context.save()
+                            } catch {
+                                print("Failed to save context: \(error)")
+                            }
                         }
                     case .none:
                         print("No import type selected")

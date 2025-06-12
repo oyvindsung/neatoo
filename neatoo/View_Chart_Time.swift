@@ -16,7 +16,7 @@ struct TimeChartView: View {
     let categoryColors: [String: Color] = [
         "学习": .red,
         "娱乐": .orange,
-        "睡眠": .yellow,
+        "工作": .yellow,
         "休息": .green,
         "交通": .blue,
         "饮食": .purple,
@@ -24,7 +24,7 @@ struct TimeChartView: View {
     ]
     
     private var taskData: [TaskChartCategory] {
-        var categories: [String: Int] = ["学习": 0, "娱乐": 0, "睡眠": 0, "休息": 0, "交通": 0, "饮食": 0, "运动": 0]
+        var categories: [String: Int] = ["学习": 0, "娱乐": 0, "睡眠": 0, "工作": 0, "交通": 0, "饮食": 0, "运动": 0]
         
         for task in tasks {
             let taskDuration = (task.duration.hour ?? 0) * 60 + (task.duration.minute ?? 0)

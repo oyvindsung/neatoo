@@ -63,7 +63,13 @@ struct FinanceView: View {
                     )
                     },
                     addItemView: {
-                        AddNewIncome { newIncome in context.insert(newIncome) }
+                        AddNewIncome { newIncome in context.insert(newIncome)
+                            do {
+                                try context.save()
+                            } catch {
+                                print("Failed to save context: \(error)")
+                            }
+                        }
                     }
                 )
             }
@@ -106,6 +112,11 @@ struct FinanceView: View {
                         for item in decodedItems {
                             withAnimation {
                                 context.insert(item)
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("Failed to save context: \(error)")
+                                }
                             }
                         }
                     } else {
@@ -113,6 +124,11 @@ struct FinanceView: View {
                         for item in decodedItems {
                             withAnimation {
                                 context.insert(item)
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("Failed to save context: \(error)")
+                                }
                             }
                         }
                     }

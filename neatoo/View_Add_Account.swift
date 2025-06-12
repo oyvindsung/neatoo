@@ -45,7 +45,11 @@ struct AddNewAccount: View {
                     Button("完成") {
                         let account = Account(serial: serial, bank: bank, balance: balance, name: name, type: type)
                         context.insert(account)
-                        print("ADDDDDDDDDDDDDDDDDDDDDDDD")
+                        do {
+                            try context.save()
+                        } catch {
+                            print("Failed to save context: \(error)")
+                        }
                         dismiss()
                     }
                     .disabled(name.isEmpty || serial.isEmpty || type.isEmpty || balance <= 0)

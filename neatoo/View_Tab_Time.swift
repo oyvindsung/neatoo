@@ -25,6 +25,11 @@ struct TimeView: View {
                         delete: { indexSet in
                             for index in indexSet {
                                 context.delete(tasks[index])
+                                do {
+                                    try context.save()
+                                } catch {
+                                    print("Failed to save context: \(error)")
+                                }
                             }
                         },
                         filename: "task_data"
@@ -36,6 +41,11 @@ struct TimeView: View {
                             lastTaskEndDate: tasks.sorted(by: { $0.endDate > $1.endDate }).first?.endDate ?? .now
                         ) { newTask in
                             context.insert(newTask)
+                            do {
+                                try context.save()
+                            } catch {
+                                print("Failed to save context: \(error)")
+                            }
                         }
                     }
                 )
@@ -69,6 +79,11 @@ struct TimeView: View {
                     for item in decodedItems {
                         withAnimation {
                             context.insert(item)
+                            do {
+                                try context.save()
+                            } catch {
+                                print("Failed to save context: \(error)")
+                            }
                         }
                     }
                 } catch {

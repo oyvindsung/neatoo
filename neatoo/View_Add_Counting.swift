@@ -27,6 +27,11 @@ struct AddNewCounting: View {
                     Button("完成") {
                         let counting = Counting(date: date, name: name)
                         context.insert(counting)
+                        do {
+                            try context.save()
+                        } catch {
+                            print("Failed to save context: \(error)")
+                        }
                         dismiss()
                     }
                     .disabled(name.isEmpty)

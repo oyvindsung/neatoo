@@ -4,6 +4,7 @@ import SwiftData
 struct AddNewPaymentView: View {
     @Query private var accounts: [Account]
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var context
     
     @State private var accountID: UUID?
     @State private var amount: Double = 0
@@ -90,6 +91,11 @@ struct AddNewPaymentView: View {
                         let payment = Payment(account: account, amount: amount, category: category, date: date, how: how, name: name, priority: priority)
                         onAdd(payment)
                         SpendAccountMoney()
+                        do {
+                            try context.save()
+                        } catch {
+                            print("Failed to save context: \(error)")
+                        }
                         dismiss()
                     }
                     .disabled(name.isEmpty)

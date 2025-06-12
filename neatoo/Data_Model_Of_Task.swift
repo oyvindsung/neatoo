@@ -11,7 +11,7 @@ import SwiftData
 enum TaskCategory: String, Codable, Identifiable, CaseIterable {
     case learn = "学习"
     case entertainment = "娱乐"
-    case sleep = "睡眠"
+    case work = "工作"
     case rest = "休息"
     case transport = "交通"
     case eating = "饮食"
